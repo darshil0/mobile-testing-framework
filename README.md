@@ -59,11 +59,7 @@ This will execute the test suite defined in the `testng.xml` file.
 ├── reports                 # Test reports will be generated here
 ├── src
 │   ├── main
-│   │   └── java
-│   │       └── com
-│   │           └── example
-│   │               └── utils
-│   │                   └── ConfigReader.java # Utility for reading config
+│   │   └── java            # Main source code (e.g., utility classes)
 │   └── test
 │       └── java
 │           └── com
