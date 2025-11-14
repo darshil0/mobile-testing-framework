@@ -1,4 +1,3 @@
-````markdown
 # Mobile Testing Framework
 
 ## Overview
@@ -15,7 +14,7 @@ This framework provides a robust and scalable structure for automating mobile ap
 - **Driver Management:** `DriverManager` handles driver initialization and cleanup.
 - **Gesture Helpers:** Simplify swipes, taps, and long-press actions with `GestureHelper`.
 - **Explicit Waits:** Use `WaitHelper` to manage dynamic waits for elements.
-- **Test Listeners:** `TestListener` logs activity and captures screenshots on failures.
+- **Base Test Class:** `BaseTest` handles driver setup and teardown, reducing boilerplate code in test classes.
 
 ## Prerequisites
 
@@ -28,18 +27,18 @@ This framework provides a robust and scalable structure for automating mobile ap
 
 ## Getting Started
 
-1. **Clone the repository:**
+1.  **Clone the repository:**
     ```bash
     git clone <repository-url>
     ```
-2. **Configure test environment:**
+2.  **Configure test environment:**
     - Update `config/config.json` with paths to your mobile app (`.apk` or `.app`) and device details.
     - Optional: Override values with environment variables, e.g., `ANDROID_VERSION`.
-3. **Start Appium server:**
+3.  **Start Appium server:**
     ```bash
     appium
     ```
-4. **Run tests:**
+4.  **Run tests:**
     ```bash
     mvn clean test -Dplatform=android
     ```
@@ -50,8 +49,7 @@ This framework provides a robust and scalable structure for automating mobile ap
 
 ## Project Structure
 
-````
-
+```
 .
 ├── config
 │   └── config.json          # Environment-specific test configurations
@@ -60,13 +58,22 @@ This framework provides a robust and scalable structure for automating mobile ap
 ├── src
 │   ├── main/java/utils      # Utility classes (DriverManager, GestureHelper, etc.)
 │   └── test/java/com/example
+│       ├── BaseTest.java    # Base class for tests
 │       └── ExampleTest.java # Sample test case
 ├── .gitignore               # Git ignore rules
 └── README.md                # This file
-
 ```
 
 ## Changelog
+
+### Version 1.2.0 (2025-11-14)
+
+- Refactored `ConfigReader` to use constants and a generic capability getter.
+- Refactored `DriverManager` to streamline driver initialization and improve capability management.
+- Refactored `WaitHelper` to load the default timeout dynamically.
+- Introduced a `BaseTest` class to handle driver setup and teardown.
+- Updated `ExampleTest` to extend `BaseTest`.
+- Updated documentation to reflect the latest changes.
 
 ### Version 1.1.0 (2025-11-13)
 
@@ -82,13 +89,6 @@ This framework provides a robust and scalable structure for automating mobile ap
 
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss proposed updates.
-```
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-✅ **Highlights of improvements:**
-
-* Clearer hierarchy and headings.
-* Streamlined feature descriptions.
-* Concise instructions for setup and test execution.
-* Professional formatting for readability in GitHub or IDEs.
-* Updated phrasing to be more action-oriented and maintainable.
+Please make sure to update tests as appropriate.

@@ -1,5 +1,6 @@
 package utils;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.slf4j.Logger;
@@ -8,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * Handles reading and parsing the configuration file (config.json).
@@ -18,16 +21,28 @@ public class ConfigReader {
     private static volatile ConfigReader instance;
     private JsonObject config;
 
+    // Configuration file keys
+    private static final String CONFIG_FILE_PATH = Paths.get("config", "config.json").toString();
+    private static final String ANDROID = "android";
+    private static final String IOS = "ios";
+    private static final String APPIUM = "appium";
+    private static final String TEST_SETTINGS = "testSettings";
+    private static final String HOST = "host";
+    private static final String PORT = "port";
+    private static final String IMPLICIT_WAIT = "implicitWait";
+    private static final String EXPLICIT_WAIT = "explicitWait";
+    private static final String SCREENSHOT_ON_FAILURE = "screenshotOnFailure";
+
     /**
      * Private constructor to prevent instantiation from outside.
      * Loads the config.json file and parses it into a JsonObject.
      */
     private ConfigReader() {
-        try (FileReader reader = new FileReader(Paths.get("config", "config.json").toString())) {
+        try (FileReader reader = new FileReader(CONFIG_FILE_PATH)) {
             config = JsonParser.parseReader(reader).getAsJsonObject();
-            logger.info("Configuration loaded successfully");
+            logger.info("Configuration loaded successfully from {}", CONFIG_FILE_PATH);
         } catch (IOException e) {
-            logger.error("Failed to load config.json", e);
+            logger.error("Failed to load configuration file: {}", CONFIG_FILE_PATH, e);
             throw new RuntimeException("Failed to load config.json", e);
         }
     }
@@ -47,68 +62,65 @@ public class ConfigReader {
         }
         return instance;
     }
-    
-    /**
-     * Gets a capability value for Android.
-     *
-     * @param key The capability key.
-     * @return The capability value.
-     */
-    public String getAndroidCapability(String key) {
-        return getCapability("android", key);
-    }
 
     /**
-     * Gets a capability value for iOS.
+     * Gets a capability value for a given platform.
      *
-     * @param key The capability key.
-     * @return The capability value.
-     */
-    public String getIosCapability(String key) {
-        return getCapability("ios", key);
-    }
-
-    /**
-     * Generic method to get a capability for a given platform.
-     *
-     * @param platform The platform (e.g., "android", "ios").
+     * @param platform The platform ("android" or "ios").
      * @param key      The capability key.
-     * @return The capability value.
+     * @return The capability value as a String, or null if not found.
      */
-    private String getCapability(String platform, String key) {
+    public String getPlatformCapability(String platform, String key) {
+        return getCapability(platform, key, JsonElement::getAsString).orElse(null);
+    }
+
+    /**
+     * Gets a boolean capability value for a given platform.
+     *
+     * @param platform     The platform ("android" or "ios").
+     * @param key          The capability key.
+     * @param defaultValue The default value to return if the key is not found.
+     * @return The capability value as a boolean.
+     */
+    public boolean getPlatformBooleanCapability(String platform, String key, boolean defaultValue) {
+        return getCapability(platform, key, JsonElement::getAsBoolean).orElse(defaultValue);
+    }
+
+    /**
+     * Gets an integer capability value for a given platform.
+     *
+     * @param platform     The platform ("android" or "ios").
+     * @param key          The capability key.
+     * @param defaultValue The default value to return if the key is not found.
+     * @return The capability value as an integer.
+     */
+    public int getPlatformIntCapability(String platform, String key, int defaultValue) {
+        return getCapability(platform, key, JsonElement::getAsInt).orElse(defaultValue);
+    }
+
+    /**
+     * Generic private method to retrieve and convert a capability.
+     *
+     * @param platform The platform section in the JSON.
+     * @param key      The key of the capability.
+     * @param converter A function to convert the JsonElement to the target type.
+     * @param <T>      The target type.
+     * @return An Optional containing the value, or empty if not found or on error.
+     */
+    private <T> Optional<T> getCapability(String platform, String key, Function<JsonElement, T> converter) {
         try {
-            String value = config.getAsJsonObject(platform).get(key).getAsString();
-            return resolveEnvironmentVariable(value);
+            JsonElement element = config.getAsJsonObject(platform).get(key);
+            if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
+                String resolvedValue = resolveEnvironmentVariable(element.getAsString());
+                return Optional.of(converter.apply(JsonParser.parseString(resolvedValue)));
+            }
+            return Optional.of(converter.apply(element));
         } catch (Exception e) {
-            logger.warn("Failed to get capability: {}.{}", platform, key, e);
-            return null;
+            logger.warn("Failed to get capability: {}.{}. Using default.", platform, key);
+            return Optional.empty();
         }
     }
-    
-    public boolean getAndroidBooleanCapability(String key) {
-        try {
-            return config.getAsJsonObject("android").get(key).getAsBoolean();
-        } catch (Exception e) {
-            return false;
-        }
-    }
-    
-    public boolean getIosBooleanCapability(String key) {
-        try {
-            return config.getAsJsonObject("ios").get(key).getAsBoolean();
-        } catch (Exception e) {
-            return false;
-        }
-    }
-    
-    public int getAndroidIntCapability(String key) {
-        try {
-            return config.getAsJsonObject("android").get(key).getAsInt();
-        } catch (Exception e) {
-            return 0;
-        }
-    }
-    
+
     /**
      * Resolves environment variables in the config value.
      * Supports the format ${ENV_VAR:-default_value}.
@@ -121,7 +133,7 @@ public class ConfigReader {
             return value;
         }
         String content = value.substring(2, value.length() - 1);
-        String[] parts = content.split(":-");
+        String[] parts = content.split(":-", 2);
         String envVar = parts[0];
         String defaultValue = parts.length > 1 ? parts[1] : null;
 
@@ -135,33 +147,36 @@ public class ConfigReader {
      * @return The Appium server URL.
      */
     public String getAppiumUrl() {
-        JsonObject appium = config.getAsJsonObject("appium");
-        String host = resolveEnvironmentVariable(appium.get("host").getAsString());
-        int port = Integer.parseInt(resolveEnvironmentVariable(appium.get("port").getAsString()));
-        return String.format("http://%s:%d", host, port);
+        JsonObject appiumConfig = config.getAsJsonObject(APPIUM);
+        String host = resolveEnvironmentVariable(appiumConfig.get(HOST).getAsString());
+        String port = resolveEnvironmentVariable(appiumConfig.get(PORT).getAsString());
+        return String.format("http://%s:%s", host, port);
     }
-    
+
+    /**
+     * Gets the implicit wait timeout from test settings.
+     *
+     * @return The implicit wait timeout in seconds.
+     */
     public int getImplicitWait() {
-        try {
-            return config.getAsJsonObject("testSettings").get("implicitWait").getAsInt();
-        } catch (Exception e) {
-            return 10;
-        }
+        return getCapability(TEST_SETTINGS, IMPLICIT_WAIT, JsonElement::getAsInt).orElse(10);
     }
-    
+
+    /**
+     * Gets the explicit wait timeout from test settings.
+     *
+     * @return The explicit wait timeout in seconds.
+     */
     public int getExplicitWait() {
-        try {
-            return config.getAsJsonObject("testSettings").get("explicitWait").getAsInt();
-        } catch (Exception e) {
-            return 30;
-        }
+        return getCapability(TEST_SETTINGS, EXPLICIT_WAIT, JsonElement::getAsInt).orElse(30);
     }
-    
+
+    /**
+     * Checks if screenshots should be taken on failure.
+     *
+     * @return True if screenshots are enabled, false otherwise.
+     */
     public boolean isScreenshotOnFailure() {
-        try {
-            return config.getAsJsonObject("testSettings").get("screenshotOnFailure").getAsBoolean();
-        } catch (Exception e) {
-            return true;
-        }
+        return getCapability(TEST_SETTINGS, SCREENSHOT_ON_FAILURE, JsonElement::getAsBoolean).orElse(true);
     }
 }
