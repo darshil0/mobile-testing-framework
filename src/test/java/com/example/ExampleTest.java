@@ -1,47 +1,45 @@
 package com.example;
 
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileElement;
-import io.appium.java_client.android.AndroidDriver;
-import org.json.JSONObject;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import utils.DriverManager;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
+/**
+ * An example test class to demonstrate the framework's usage.
+ */
 public class ExampleTest {
+    private AppiumDriver driver;
 
-    private AppiumDriver<MobileElement> driver;
-
+    /**
+     * Sets up the driver before each test method.
+     */
     @BeforeMethod
-    public void setUp() throws IOException {
-        String configString = new String(Files.readAllBytes(Paths.get("config/config.json")));
-        JSONObject config = new JSONObject(configString);
-        JSONObject androidConfig = config.getJSONObject("android");
-
-        DesiredCapabilities caps = new DesiredCapabilities();
-        for (String key : androidConfig.keySet()) {
-            caps.setCapability(key, androidConfig.get(key));
+    public void setUp() {
+        String platform = System.getProperty("platform", "android");
+        try {
+            DriverManager.initializeDriver(platform);
+            driver = DriverManager.getDriver();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to set up the driver", e);
         }
-
-        driver = new AndroidDriver<>(new URL("http://localhost:4723/wd/hub"), caps);
     }
 
+    /**
+     * An example test case.
+     */
     @Test
     public void testExample() {
         // Your test logic here
+        System.out.println("Driver initialized successfully!");
     }
 
+    /**
+     * Tears down the driver after each test method.
+     */
     @AfterMethod
     public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
+        DriverManager.quitDriver();
     }
 }

@@ -13,6 +13,9 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * TestNG listener for logging test events and taking screenshots on failure.
+ */
 public class TestListener implements ITestListener {
     private static final Logger logger = LoggerFactory.getLogger(TestListener.class);
     
@@ -43,7 +46,6 @@ public class TestListener implements ITestListener {
             logger.error("Stack Trace: ", throwable);
         }
         
-        // Take screenshot on failure
         if (ConfigReader.getInstance().isScreenshotOnFailure()) {
             takeScreenshot(result.getName());
         }
@@ -82,6 +84,11 @@ public class TestListener implements ITestListener {
         logger.info("========================================");
     }
     
+    /**
+     * Takes a screenshot and saves it to the reports directory.
+     *
+     * @param testName The name of the test to use in the screenshot filename.
+     */
     private void takeScreenshot(String testName) {
         try {
             TakesScreenshot screenshot = (TakesScreenshot) DriverManager.getDriver();
@@ -92,6 +99,12 @@ public class TestListener implements ITestListener {
             String destination = "reports/screenshots/" + fileName;
             
             File destFile = new File(destination);
-            destFile.getParentFile().mkdirs(); // Create directories if they don't exist
+            destFile.getParentFile().mkdirs();
             
-            FileUtils.copyFile(
+            FileUtils.copyFile(source, destFile);
+            logger.info("Screenshot saved to: {}", destination);
+        } catch (Exception e) {
+            logger.error("Failed to take screenshot", e);
+        }
+    }
+}
