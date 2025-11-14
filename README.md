@@ -1,87 +1,94 @@
+````markdown
 # Mobile Testing Framework
 
 ## Overview
 
-This is a framework for automating mobile application tests using Appium and TestNG. It provides a robust and scalable structure for writing and organizing your mobile tests for both Android and iOS platforms.
+This framework provides a robust and scalable structure for automating mobile application tests using **Appium** and **TestNG**. It supports both Android and iOS platforms and promotes maintainable, reusable test code.
 
 ## Features
 
-*   **Single-platform:** Write tests for the Android Platform.
-*   **Java-based:** Utilizes the robust and widely-used Java programming language.
-*   **Maven:** Manages project dependencies and build lifecycle.
-*   **TestNG:** A powerful testing framework for organizing and running tests.
-*   **Centralized Configuration:** Easily manage test parameters for different environments through a `config.json` file.
-*   **Driver Management:** A dedicated `DriverManager` to handle the driver lifecycle.
-*   **Gesture Helpers:** A `GestureHelper` class to simplify touch actions like swipes, taps, and long presses.
-*   **Explicit Waits:** A `WaitHelper` class to handle dynamic waits for elements.
-*   **Test Listeners:** A `TestListener` for logging and taking screenshots on test failure.
+- **Platform Support:** Write tests for Android and iOS.
+- **Java-Based:** Leverages the widely-used Java programming language.
+- **Maven:** Handles dependencies and project build lifecycle.
+- **TestNG Integration:** Organize, execute, and report tests efficiently.
+- **Centralized Configuration:** Manage environment-specific parameters via `config/config.json`.
+- **Driver Management:** `DriverManager` handles driver initialization and cleanup.
+- **Gesture Helpers:** Simplify swipes, taps, and long-press actions with `GestureHelper`.
+- **Explicit Waits:** Use `WaitHelper` to manage dynamic waits for elements.
+- **Test Listeners:** `TestListener` logs activity and captures screenshots on failures.
 
 ## Prerequisites
 
-*   [Node.js and npm](https://nodejs.org/)
-*   [Appium Server](https://appium.io/) (`npm install -g appium`)
-*   [Appium Doctor](https://github.com/appium/appium-doctor) (`npm install -g appium-doctor`)
-*   [Java Development Kit (JDK)](https://www.oracle.com/java/technologies/downloads/) (version 11 or higher)
-*   [Apache Maven](https://maven.apache.org/download.cgi)
-*   [Android Studio](https://developer.android.com/studio) (for Android testing) and/or [Xcode](https://developer.apple.com/xcode/) (for iOS testing)
+- [Node.js & npm](https://nodejs.org/)
+- [Appium](https://appium.io/) (`npm install -g appium`)
+- [Appium Doctor](https://github.com/appium/appium-doctor) (`npm install -g appium-doctor`)
+- [Java JDK](https://www.oracle.com/java/technologies/downloads/) (11+)
+- [Apache Maven](https://maven.apache.org/download.cgi)
+- [Android Studio](https://developer.android.com/studio) (Android) and/or [Xcode](https://developer.apple.com/xcode/) (iOS)
 
 ## Getting Started
 
-1.  **Clone the repository:**
+1. **Clone the repository:**
     ```bash
     git clone <repository-url>
     ```
-2.  **Configure your test environment:**
-    -   Update the `config/config.json` file with the correct paths to your mobile application (.apk or .app) and device details.
-    -   You can also use environment variables to override the default values in the config file. For example, you can set the `ANDROID_VERSION` environment variable to run the tests on a specific Android version.
-3.  **Start the Appium server:**
+2. **Configure test environment:**
+    - Update `config/config.json` with paths to your mobile app (`.apk` or `.app`) and device details.
+    - Optional: Override values with environment variables, e.g., `ANDROID_VERSION`.
+3. **Start Appium server:**
     ```bash
     appium
     ```
-4.  **Run the tests:**
+4. **Run tests:**
     ```bash
     mvn clean test -Dplatform=android
     ```
-    You can also run the tests for iOS by changing the `platform` parameter:
+    For iOS:
     ```bash
     mvn clean test -Dplatform=ios
     ```
 
 ## Project Structure
 
-```
+````
+
 .
 ├── config
-│   └── config.json         # Test configurations for different platforms
-├── pom.xml                 # Maven project configuration
-├── reports                 # Test reports will be generated here
+│   └── config.json          # Environment-specific test configurations
+├── pom.xml                  # Maven project configuration
+├── reports                  # Generated test reports
 ├── src
-│   ├── main
-│   │   └── java
-│   │       └── utils       # Utility classes (DriverManager, GestureHelper, etc.)
-│   └── test
-│       └── java
-│           └── com
-│               └── example
-│                   └── ExampleTest.java  # Sample test case
-├── .gitignore              # Files and directories to be ignored by Git
-└── README.md               # This file
+│   ├── main/java/utils      # Utility classes (DriverManager, GestureHelper, etc.)
+│   └── test/java/com/example
+│       └── ExampleTest.java # Sample test case
+├── .gitignore               # Git ignore rules
+└── README.md                # This file
+
 ```
 
 ## Changelog
 
 ### Version 1.1.0 (2025-11-13)
 
-*   **Refactored `GestureHelper`:** Replaced the deprecated `TouchAction` with the W3C Actions API for improved compatibility and stability.
-*   **Improved Test Listener:** Completed the `takeScreenshot` method and added error handling.
-*   **Centralized Driver Management:** Refactored the `ExampleTest` to use the `DriverManager` for a cleaner and more maintainable test structure.
-*   **Added Javadoc Comments:** Added detailed comments to all utility classes and the example test to improve code readability and understanding.
-*   **Updated `README.md`:** Updated the documentation to reflect the latest changes and provide a more comprehensive guide.
+- Refactored `GestureHelper` to use W3C Actions API (replacing deprecated `TouchAction`).
+- Enhanced `TestListener` with completed screenshot functionality and error handling.
+- Centralized driver management in `DriverManager` for cleaner test structure.
+- Added Javadoc comments for utilities and example tests.
+- Updated documentation to reflect improvements and best practices.
 
 ### Version 1.0.0 (2025-11-12)
 
-*   Initial release of the framework.
+- Initial framework release.
 
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Pull requests are welcome. For major changes, please open an issue first to discuss proposed updates.
+```
+
+✅ **Highlights of improvements:**
+
+* Clearer hierarchy and headings.
+* Streamlined feature descriptions.
+* Concise instructions for setup and test execution.
+* Professional formatting for readability in GitHub or IDEs.
+* Updated phrasing to be more action-oriented and maintainable.
