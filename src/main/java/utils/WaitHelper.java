@@ -10,14 +10,30 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 
+/**
+ * Utility class for handling explicit waits.
+ */
 public class WaitHelper {
     private static final Logger logger = LoggerFactory.getLogger(WaitHelper.class);
     private static final int DEFAULT_TIMEOUT = ConfigReader.getInstance().getExplicitWait();
-    
+
+    /**
+     * Waits for an element to be visible using the default timeout.
+     *
+     * @param driver  The Appium driver.
+     * @param element The element to wait for.
+     */
     public static void waitForElementToBeVisible(AppiumDriver driver, WebElement element) {
         waitForElementToBeVisible(driver, element, DEFAULT_TIMEOUT);
     }
-    
+
+    /**
+     * Waits for an element to be visible using a custom timeout.
+     *
+     * @param driver           The Appium driver.
+     * @param element          The element to wait for.
+     * @param timeoutInSeconds The custom timeout in seconds.
+     */
     public static void waitForElementToBeVisible(AppiumDriver driver, WebElement element, int timeoutInSeconds) {
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
@@ -42,10 +58,23 @@ public class WaitHelper {
         }
     }
     
+    /**
+     * Waits for an element to be clickable using the default timeout.
+     *
+     * @param driver  The Appium driver.
+     * @param element The element to wait for.
+     */
     public static void waitForElementToBeClickable(AppiumDriver driver, WebElement element) {
         waitForElementToBeClickable(driver, element, DEFAULT_TIMEOUT);
     }
-    
+
+    /**
+     * Waits for an element to be clickable using a custom timeout.
+     *
+     * @param driver           The Appium driver.
+     * @param element          The element to wait for.
+     * @param timeoutInSeconds The custom timeout in seconds.
+     */
     public static void waitForElementToBeClickable(AppiumDriver driver, WebElement element, int timeoutInSeconds) {
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
@@ -56,10 +85,23 @@ public class WaitHelper {
         }
     }
     
+    /**
+     * Waits for an element to be invisible using the default timeout.
+     *
+     * @param driver  The Appium driver.
+     * @param element The element to wait for.
+     */
     public static void waitForElementToBeInvisible(AppiumDriver driver, WebElement element) {
         waitForElementToBeInvisible(driver, element, DEFAULT_TIMEOUT);
     }
-    
+
+    /**
+     * Waits for an element to be invisible using a custom timeout.
+     *
+     * @param driver           The Appium driver.
+     * @param element          The element to wait for.
+     * @param timeoutInSeconds The custom timeout in seconds.
+     */
     public static void waitForElementToBeInvisible(AppiumDriver driver, WebElement element, int timeoutInSeconds) {
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
@@ -69,11 +111,24 @@ public class WaitHelper {
             throw e;
         }
     }
-    
+
+    /**
+     * Waits for the presence of an element using the default timeout.
+     *
+     * @param driver  The Appium driver.
+     * @param locator The locator of the element.
+     */
     public static void waitForPresenceOfElement(AppiumDriver driver, By locator) {
         waitForPresenceOfElement(driver, locator, DEFAULT_TIMEOUT);
     }
-    
+
+    /**
+     * Waits for the presence of an element using a custom timeout.
+     *
+     * @param driver           The Appium driver.
+     * @param locator          The locator of the element.
+     * @param timeoutInSeconds The custom timeout in seconds.
+     */
     public static void waitForPresenceOfElement(AppiumDriver driver, By locator, int timeoutInSeconds) {
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
@@ -83,7 +138,15 @@ public class WaitHelper {
             throw e;
         }
     }
-    
+
+    /**
+     * Waits for an element to disappear from the DOM.
+     *
+     * @param driver           The Appium driver.
+     * @param locator          The locator of the element.
+     * @param timeoutInSeconds The custom timeout in seconds.
+     * @return True if the element disappears, false otherwise.
+     */
     public static boolean waitForElementToDisappear(AppiumDriver driver, By locator, int timeoutInSeconds) {
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
@@ -93,8 +156,15 @@ public class WaitHelper {
             return false;
         }
     }
-    
-    public static void customWait(AppiumDriver driver, int timeoutInSeconds, 
+
+    /**
+     * A custom wait that uses a specific ExpectedCondition.
+     *
+     * @param driver           The Appium driver.
+     * @param timeoutInSeconds The custom timeout in seconds.
+     * @param condition        The ExpectedCondition to wait for.
+     */
+    public static void customWait(AppiumDriver driver, int timeoutInSeconds,
                                  org.openqa.selenium.support.ui.ExpectedCondition<?> condition) {
         try {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
