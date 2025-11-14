@@ -6,7 +6,7 @@ This is a framework for automating mobile application tests using Appium and Tes
 
 ## Features
 
-*   **Cross-platform:** Write tests for both Android and iOS.
+*   **Single-platform:** Write tests for the Android Platform.
 *   **Java-based:** Utilizes the robust and widely-used Java programming language.
 *   **Maven:** Manages project dependencies and build lifecycle.
 *   **TestNG:** A powerful testing framework for organizing and running tests.
