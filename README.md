@@ -70,7 +70,7 @@ This is a framework for automating mobile application tests using Appium and Tes
 
 ## Changelog
 
-### Version 1.1.0 (2024-07-26)
+### Version 1.1.0 (2025-11-13)
 
 *   **Refactored `GestureHelper`:** Replaced the deprecated `TouchAction` with the W3C Actions API for improved compatibility and stability.
 *   **Improved Test Listener:** Completed the `takeScreenshot` method and added error handling.
@@ -78,7 +78,7 @@ This is a framework for automating mobile application tests using Appium and Tes
 *   **Added Javadoc Comments:** Added detailed comments to all utility classes and the example test to improve code readability and understanding.
 *   **Updated `README.md`:** Updated the documentation to reflect the latest changes and provide a more comprehensive guide.
 
-### Version 1.0.0 (2024-07-25)
+### Version 1.0.0 (2025-11-12)
 
 *   Initial release of the framework.
 
