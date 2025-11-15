@@ -12,7 +12,10 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
-/** TestNG listener for logging test events and taking screenshots on failure. */
+/**
+ * TestNG listener for logging test events and taking screenshots on failure.
+ * Handles test lifecycle events including start, success, failure, and skip.
+ */
 public class TestListener implements ITestListener {
   private static final Logger logger = LoggerFactory.getLogger(TestListener.class);
 
@@ -43,9 +46,8 @@ public class TestListener implements ITestListener {
       logger.error("Stack Trace: ", throwable);
     }
 
-    if (ConfigReader.getInstance().isScreenshotOnFailure()) {
-      takeScreenshot(result.getName());
-    }
+    // Take screenshot on failure
+    takeScreenshot(result.getName());
 
     logger.error("========================================");
   }
@@ -82,12 +84,19 @@ public class TestListener implements ITestListener {
   }
 
   /**
-   * Takes a screenshot and saves it to the reports directory.
+   * Takes a screenshot and saves it to the reports/screenshots directory.
+   * Uses DriverManager to access the current driver instance.
    *
    * @param testName The name of the test to use in the screenshot filename.
    */
   private void takeScreenshot(String testName) {
     try {
+      // Check if driver is available
+      if (DriverManager.getDriver() == null) {
+        logger.warn("Cannot take screenshot - driver is null");
+        return;
+      }
+
       TakesScreenshot screenshot = (TakesScreenshot) DriverManager.getDriver();
       File source = screenshot.getScreenshotAs(OutputType.FILE);
 
@@ -101,7 +110,8 @@ public class TestListener implements ITestListener {
       FileUtils.copyFile(source, destFile);
       logger.info("Screenshot saved to: {}", destination);
     } catch (Exception e) {
-      logger.error("Failed to take screenshot", e);
+      logger.error("Failed to take screenshot: {}", e.getMessage());
+      logger.debug("Screenshot error details: ", e);
     }
   }
 }
