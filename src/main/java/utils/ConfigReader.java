@@ -24,7 +24,7 @@ public class ConfigReader {
   private static final String CONFIG_FILE_PATH = Paths.get("config", "config.json").toString();
   private static final String ANDROID = "android";
   private static final String IOS = "ios";
-  private static final String APPIUM = "appium";
+  private static final String APPIUM = "appiumServer";
   private static final String TEST_SETTINGS = "testSettings";
   private static final String HOST = "host";
   private static final String PORT = "port";
