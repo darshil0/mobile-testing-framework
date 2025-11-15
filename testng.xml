@@ -1,12 +1,22 @@
-<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
-<suite name="MobileTestSuite" verbose="1" >
-    <listeners>
-        <listener class-name="utils.TestListener"/>
-    </listeners>
-    <test name="AndroidTest" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Mobile Test Suite" parallel="false" verbose="1">
+    
+    <test name="Android Tests">
         <parameter name="platform" value="android"/>
         <classes>
             <class name="com.example.ExampleTest"/>
         </classes>
     </test>
+    
+    <!-- Uncomment for iOS testing -->
+    <!--
+    <test name="iOS Tests">
+        <parameter name="platform" value="ios"/>
+        <classes>
+            <class name="com.example.ExampleTest"/>
+        </classes>
+    </test>
+    -->
+    
 </suite>
