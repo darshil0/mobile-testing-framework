@@ -541,6 +541,19 @@ caps.setCapability("resetKeyboard", true);
 
 ## Changelog
 
+### Version 1.4.0 (2025-11-15)
+- 🔧 **Dependency Resolution:** Resolved critical dependency conflicts between Appium (`9.3.0`) and Selenium (`4.19.0`) by downgrading Selenium and excluding transitive dependencies. This fixes `NoClassDefFoundError` and improves stability.
+- 🔧 **Code Refactoring:**
+  - Refactored `BaseTest` to use the centralized `DriverManager` for improved driver lifecycle management and reduced code duplication.
+  - Updated `DriverManager` to use modern Appium 2.x `Options` classes and ensured all capabilities are prefixed with `appium:`, aligning with current best practices.
+- 🐛 **Bug Fixes:**
+  - Corrected `BaseTest` package declaration and import statements to resolve compilation errors.
+  - Fixed a `NullPointerException` in `ConfigReader` by aligning the configuration key for the Appium server.
+- 🔧 **Project Maintenance:**
+  - Corrected a typo in the `.gitignore` filename.
+  - Removed a redundant `test` directory from the `src/main` folder to clean up the project structure.
+- 📚 **Documentation:** Updated `README.md` with the latest changes and detailed troubleshooting steps for common environment issues.
+
 ### Version 1.3.0 (2025-11-15)
 - ✨ Added `TestUtils` utility class with screenshot and interaction helpers
 - ✨ Added `DriverException` for custom exception handling
