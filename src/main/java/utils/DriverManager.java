@@ -76,17 +76,21 @@ public class DriverManager {
    */
   private static void setCommonCapabilities(String platform, BaseOptions<?> options) {
     ConfigReader config = ConfigReader.getInstance();
+
     options.setPlatformName(config.getPlatformCapability(platform, "platformName"));
     options.setPlatformVersion(config.getPlatformCapability(platform, "platformVersion"));
+    options.setAutomationName(config.getPlatformCapability(platform, "automationName"));
+
     options.setCapability(
         "appium:deviceName", config.getPlatformCapability(platform, "deviceName"));
     options.setCapability("appium:app", config.getPlatformCapability(platform, "app"));
-    options.setAutomationName(config.getPlatformCapability(platform, "automationName"));
-    options.setNoReset(config.getPlatformBooleanCapability(platform, "noReset", false));
-    options.setFullReset(config.getPlatformBooleanCapability(platform, "fullReset", false));
+    options.setCapability(
+        "appium:noReset", config.getPlatformBooleanCapability(platform, "noReset", false));
+    options.setCapability(
+        "appium:fullReset", config.getPlatformBooleanCapability(platform, "fullReset", false));
 
     int timeout = config.getPlatformIntCapability(platform, "newCommandTimeout", 300);
-    options.setCapability("newCommandTimeout", timeout);
+    options.setCapability("appium:newCommandTimeout", timeout);
   }
 
   /** Sets the implicit wait for the current driver instance. */
