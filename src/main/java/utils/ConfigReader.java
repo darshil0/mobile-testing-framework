@@ -112,7 +112,15 @@ public class ConfigReader {
       JsonElement element = config.getAsJsonObject(platform).get(key);
       if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
         String resolvedValue = resolveEnvironmentVariable(element.getAsString());
-        return Optional.of(converter.apply(JsonParser.parseString(resolvedValue)));
+        JsonElement newElement;
+        try {
+          // Try to parse as JSON for booleans, numbers, etc.
+          newElement = JsonParser.parseString(resolvedValue);
+        } catch (com.google.gson.JsonSyntaxException e) {
+          // If parsing fails, treat it as a literal string
+          newElement = new com.google.gson.JsonPrimitive(resolvedValue);
+        }
+        return Optional.of(converter.apply(newElement));
       }
       return Optional.of(converter.apply(element));
     } catch (Exception e) {
