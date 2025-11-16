@@ -13,8 +13,8 @@ import org.testng.ITestListener;
 import org.testng.ITestResult;
 
 /**
- * TestNG listener for logging test events and taking screenshots on failure.
- * Handles test lifecycle events including start, success, failure, and skip.
+ * TestNG listener for logging test events and taking screenshots on failure. Handles test lifecycle
+ * events including start, success, failure, and skip.
  */
 public class TestListener implements ITestListener {
   private static final Logger logger = LoggerFactory.getLogger(TestListener.class);
@@ -84,8 +84,8 @@ public class TestListener implements ITestListener {
   }
 
   /**
-   * Takes a screenshot and saves it to the reports/screenshots directory.
-   * Uses DriverManager to access the current driver instance.
+   * Takes a screenshot and saves it to the reports/screenshots directory. Uses DriverManager to
+   * access the current driver instance.
    *
    * @param testName The name of the test to use in the screenshot filename.
    */

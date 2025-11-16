@@ -1,31 +1,29 @@
 {
   "android": {
     "platformName": "Android",
-    "platformVersion": "13.0",
+    "platformVersion": "${ANDROID_VERSION:-13.0}",
     "deviceName": "Android Emulator",
     "automationName": "UiAutomator2",
-    "app": "/path/to/your/app.apk",
+    "app": "${ANDROID_APP_PATH:-/path/to/your/app.apk}",
     "appPackage": "com.example.app",
-    "appActivity": "com.example.app.MainActivity",
-    "noReset": false,
-    "fullReset": false,
-    "newCommandTimeout": 300,
-    "autoGrantPermissions": true
+    "appActivity": "com.example.app.MainActivity"
   },
   "ios": {
     "platformName": "iOS",
-    "platformVersion": "16.0",
+    "platformVersion": "${IOS_VERSION:-16.0}",
     "deviceName": "iPhone 14",
     "automationName": "XCUITest",
-    "app": "/path/to/your/app.app",
-    "bundleId": "com.example.app",
-    "noReset": false,
-    "fullReset": false,
-    "newCommandTimeout": 300,
-    "autoAcceptAlerts": true
+    "app": "${IOS_APP_PATH:-/path/to/your/app.app}",
+    "bundleId": "com.example.app"
   },
   "appiumServer": {
-    "url": "http://127.0.0.1:4723",
-    "timeout": 60
+    "host": "${APPIUM_HOST:-127.0.0.1}",
+    "port": "${APPIUM_PORT:-4723}"
+  },
+  "testSettings": {
+    "implicitWait": 15,
+    "explicitWait": 30,
+    "screenshotOnFailure": true,
+    "noReset": true
   }
 }
