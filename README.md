@@ -541,6 +541,19 @@ caps.setCapability("resetKeyboard", true);
 
 ## Changelog
 
+### Version 1.5.0 (2025-11-15)
+- 🚀 **Final Release:** This version consolidates all recent fixes and improvements into a single, stable release.
+- 🔧 **Dependency Resolution:** Resolved critical dependency conflicts between Appium (`9.3.0`) and Selenium (`4.19.0`) to ensure a stable build.
+- 🔧 **Code Refactoring:**
+  - Refactored `BaseTest` to use the centralized `DriverManager` for improved driver lifecycle management.
+  - Updated `DriverManager` to use modern Appium 2.x `Options` and capabilities.
+- 🐛 **Bug Fixes:**
+  - Corrected `BaseTest` package declaration, import statements, and fixed a `NullPointerException` in `ConfigReader`.
+- 🔧 **Project Maintenance:**
+  - Corrected `.gitignore` filename and removed a redundant directory.
+- 📚 **Documentation:** Updated `README.md` with a detailed changelog and troubleshooting steps.
+- 🎨 **Formatting:** Applied the Google Java Format to the entire codebase for consistency.
+
 ### Version 1.4.0 (2025-11-15)
 - 🔧 **Dependency Resolution:** Resolved critical dependency conflicts between Appium (`9.3.0`) and Selenium (`4.19.0`) by downgrading Selenium and excluding transitive dependencies. This fixes `NoClassDefFoundError` and improves stability.
 - 🔧 **Code Refactoring:**
